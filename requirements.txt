@@ -1,0 +1,25 @@
+# --- Core data science ---
+numpy>=1.24.0
+pandas>=2.0.0
+
+# --- Machine learning ---
+scikit-learn>=1.3.0
+
+# --- Experiment tracking (MLOps) ---
+mlflow>=2.9.0
+
+# --- App / dashboard ---
+streamlit>=1.39.0
+plotly>=5.18.0
+
+# --- Model serialisation ---
+joblib>=1.3.0
+
+# --- Testing ---
+pytest>=7.4.0
+
+# --- Hugging Face Hub (model storage) ---
+huggingface_hub>=1.0.0
+
+# --- Optional: stronger models (uncomment if you use them) ---
+# xgboost>=2.0.0

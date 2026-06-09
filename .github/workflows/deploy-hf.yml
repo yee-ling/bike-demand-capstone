@@ -1,0 +1,55 @@
+# =============================================================================
+# Deploy to a live, browser-openable URL: a Hugging Face Space (Streamlit SDK).
+#
+# How it works: a Hugging Face Space IS a git repo. "Deploying" = pushing our code
+# to that repo's remote. HF then rebuilds the app on their side and serves it at
+#   https://huggingface.co/spaces/<user>/<space>.
+#
+# ONE-TIME SETUP (see instructions/SETUP.md):
+#   1. Create a Space:  huggingface.co/new-space  -> SDK: Streamlit -> Blank.
+#   2. Create an access token (Settings -> Access Tokens, role: Write).
+#   3. In THIS GitHub repo: Settings -> Secrets and variables -> Actions
+#        - Secret   HF_TOKEN    = the write token
+#        - Variable HF_USERNAME = your HF username
+#        - Variable HF_SPACE    = the space name you created
+#   4. Streamlit Spaces read README.md front-matter (sdk: streamlit, app_file: app.py)
+#      and serve the app automatically — no port config needed.
+# =============================================================================
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Push to HF Space
+    runs-on: ubuntu-latest
+
+    steps:
+      # Single-commit checkout — avoids pushing large model files from earlier history.
+      - name: Check out the code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Push to the Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}        # secret -> never printed
+          HF_USERNAME: ${{ vars.HF_USERNAME }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Authenticated remote. HF_TOKEN is masked by Actions in any log output.
+          REMOTE="https://${HF_USERNAME}:${HF_TOKEN}@huggingface.co/spaces/${HF_USERNAME}/${HF_SPACE}.git"
+          # Force-push our main onto the Space's main (the Space mirrors our repo).
+          git push --force "$REMOTE" HEAD:main
+
+      - name: Where to find it
+        env:
+          HF_USERNAME: ${{ vars.HF_USERNAME }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          echo "Live at: https://huggingface.co/spaces/${HF_USERNAME}/${HF_SPACE}" >> "$GITHUB_STEP_SUMMARY"

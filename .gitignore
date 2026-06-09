@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+
+# Model files (stored on HF Hub instead of git)
+models/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# MLflow (commit screenshots in MODEL_CARD.md instead — artifacts can be large)
+mlruns/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# MLflow database
+mlflow.db
+
+# Secrets — NEVER commit tokens
+.env
+*.token
+
+# Course materials (not part of shipped project)
+instructions/
