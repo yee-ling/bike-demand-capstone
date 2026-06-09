@@ -28,11 +28,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Single-commit checkout — avoids pushing large model files from earlier history.
+      # Full history — safe now that no large files exist in git history.
       - name: Check out the code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Push to the Space
         env:
