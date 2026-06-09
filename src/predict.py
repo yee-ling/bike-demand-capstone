@@ -42,6 +42,7 @@ def load_model(path: str = CHAMPION_PATH) -> Any:
             repo_id=HF_MODEL_REPO,
             filename="champion.pkl",
             local_dir=os.path.dirname(path) or ".",
+            token=True,
         )
     return joblib.load(path)
 
